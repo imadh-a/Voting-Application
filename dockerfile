@@ -1,13 +1,23 @@
-FROM node:latest
+# Use an official Node.js runtime as a parent image
+FROM node:14
 
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-COPY package.json ./
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-RUN npm install
+# Upgrade Bower
+RUN npm install -g bower@latest
 
+# Install app dependencies
+RUN npm install --allow-root
+
+# Bundle your app source code into the container
 COPY . .
 
+# Expose the port the app runs on
 EXPOSE 3000
 
-CMD [ "node", "index.js" ]
+# Define the command to run your app
+CMD ["node", "index.js"]
